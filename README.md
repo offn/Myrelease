@@ -1,2 +1,2 @@
-Myrelease
+Test project
 =========
