@@ -1,0 +1,206 @@
+﻿﻿.editorWYSIWYG {
+    /* font: 10pt Tahoma;
+ border-bottom: 1px solid #b2b2b2;*/
+}
+
+.editorBBCODE {
+    /*font: 9pt "Courier New";*/
+}
+
+div#editorBBCODEdiv {
+    width: 96%;
+    height: 400px;
+    text-align: left;
+    border:1px solid silver;
+    background: #efefef;
+    margin-left: 1%;
+    margin-right: 1%;
+    padding: 10px;
+}
+
+#htmlContent{
+    overflow: auto;
+    height: 100%
+}
+
+div#editorBBCODEdiv textarea {
+    width: 99.9%;
+    height: 99%;
+    border:none;
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+div.richeditor div.editbar {
+    margin-top: 5px;
+    border-left: 1px solid silver;
+    border-right: 1px solid silver;
+    border-top: 1px solid silver;
+    border-bottom: none;
+}
+
+div.richeditor div button {
+    vertical-align: middle;
+    width: 25px;
+    height: 25px;
+    border: 1px solid transparent;
+    background-color: Transparent;
+    cursor: pointer;
+    color: Black;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: none;
+}
+
+div.richeditor div button:hover {
+    border: 1px solid silver;
+}
+
+div.richeditor div.container {
+    border-top: none;
+    border-bottom: 1px solid silver;
+    border-left: 1px solid silver;
+    border-right: 1px solid silver;
+}
+
+div.richeditor textarea {
+    padding: 0px 0px 0px 0px;
+    border: none;
+}
+
+div.richeditor iframe {
+    background-color: #ffffff;
+    border: none;
+}
+
+.leftText {
+    text-align: left;
+}
+
+.rightText {
+    text-align: right;
+}
+
+.centerText {
+    text-align: center;
+}
+
+.highlight {
+    background-color: silver;
+}
+
+.textSize7 {
+    font-size: xx-small;
+}
+
+.textSize9 {
+    font-size: x-small;
+}
+
+.textSize12 {
+    font-size: inherit;
+}
+
+.textSize18 {
+    font-size: large;
+}
+
+.textSize24 {
+    font-size: x-large;
+}
+
+.marginLeft15 {
+    margin-left: 15px;
+}
+
+.marginLeft20 {
+    margin-left: 20px;
+}
+
+.marginLeft25 {
+    margin-left: 25px;
+}
+
+.quote {
+    margin: 10px 50px;
+}
+
+.quote_title {
+    float: left;
+    padding: 5px;
+    -moz-box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3), -1px 0 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3), -1px 0 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3), -1px 0 2px rgba(0, 0, 0, 0.3);
+    -moz-border-radius: 5px 5px 0px 0px;
+    -webkit-border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
+    border: 1px solid grey;
+    border-bottom: none;
+    background: #C6C6C6;
+}
+
+.quote blockquote {
+    clear: both;
+    padding: 5px;
+    background: white;
+    -moz-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3), -1px 0 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3), -1px 0 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3), -1px 0 2px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+}
+
+blockquote:after {
+        content: ".";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+}
+
+.code {
+    border: 1px #5f9ea0 solid;
+}
+
+.list {
+    margin-left: 50px;
+}
+
+.list li {
+    padding: 3px 0;
+}
+
+.unordered-list {
+    list-style: disc outside;
+}
+
+.offtop {
+    margin: 10px;
+    font-size: 11px;
+}
+
+.offtop div {
+    float: left;
+    padding: 5px 5px 0 10px;
+}
+
+.offtop p {
+    clear: both;
+    padding: 5px;
+    color: #8e8e8e;
+}
+
+.thumbnail {
+    max-height: 150px;
+    max-width: 150px;
+}
+
+pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla*/
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}

@@ -1,6 +1,34 @@
-*.class
+# Please keep in mind:
+# - If you need to ignore files on your local machine only, please use .git/info/exclude instead .gitignore
+# - Project specified ignore rules must be located in project directory only
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# Eclipse project files
+.settings
+.classpath
+.project
+.metadata
+.mymetadata
+.springBeans
+.gradle
+
+# IntelliJ Idea project files
+.idea
+*.iml
+*.ipr
+*.iws
+
+# Netbeans project files
+nbproject
+
+# Always ignore these directories/files
+target
+logs
+
+/jcommune-view/jcommune-web-controller/test-output
+/jcommune-model/test-output
+/jcommune-service/test-output
+/jcommune-view/jcommune-web-view/test-output
+/jcommune-view/jcommune-web-controller/bin
+/jcommune-view/jcommune-web-view/bin
+/jcommune-service/bin
+/jcommune-model/bin

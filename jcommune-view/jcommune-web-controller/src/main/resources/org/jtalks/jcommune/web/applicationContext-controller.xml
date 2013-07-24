@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011  JTalks.org Team
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Web-level helper beans -->
+
+    <bean name="forumStaticsProvider" class="org.jtalks.jcommune.web.util.ForumStatisticsProvider">
+        <constructor-arg index="0" ref="sessionRegistry"/>
+        <constructor-arg index="1" ref="sessionStatisticListener"/>
+        <constructor-arg index="2" ref="forumStatisticsService"/>
+    </bean>
+
+    <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl"/>
+
+    <bean id="breadcrumbBuilder" class="org.jtalks.jcommune.web.util.BreadcrumbBuilder"/>
+
+    <bean id="sessionStatisticListener" class="org.jtalks.jcommune.web.listeners.SessionStatisticListener"/>
+
+    <bean id="captchaProducer"
+        class="com.google.code.kaptcha.impl.DefaultKaptcha">
+        <property name="config">
+                <bean class="com.google.code.kaptcha.util.Config">
+                        <constructor-arg type="java.util.Properties">
+                                <props>
+                                        <prop key="kaptcha.image.width">100</prop>
+                                        <prop key="kaptcha.image.height">50</prop>
+                                        <prop key="kaptcha.textproducer.char.string">${CAPTCHA_POSSIBLE_SYMBOLS:0123456789}</prop>
+                                        <prop key="kaptcha.textproducer.char.length">4</prop>
+                                </props>
+                        </constructor-arg>
+                </bean>
+        </property>
+    </bean>
+     
+    <bean id="jsonUtils" class="org.jtalks.jcommune.web.util.JSONUtils">
+        <constructor-arg>
+            <bean class="org.codehaus.jackson.JsonFactory"/>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="org.codehaus.jackson.map.ObjectMapper"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="avatarControllerUtils"  class="org.jtalks.jcommune.web.util.ImageControllerUtils">
+        <constructor-arg ref="avatarService"/>
+        <constructor-arg ref="jsonUtils"/>
+    </bean>
+
+    <bean id="forumLogoControllerUtils"  class="org.jtalks.jcommune.web.util.ImageControllerUtils">
+        <constructor-arg ref="forumLogoService"/>
+        <constructor-arg ref="jsonUtils"/>
+    </bean>
+
+    <bean id="favIconIcoControllerUtils"  class="org.jtalks.jcommune.web.util.ImageControllerUtils">
+        <constructor-arg ref="favIconServiceIco"/>
+        <constructor-arg ref="jsonUtils"/>
+    </bean>
+
+    <bean id="favIconPngControllerUtils"  class="org.jtalks.jcommune.web.util.ImageControllerUtils">
+        <constructor-arg ref="favIconServicePng"/>
+        <constructor-arg ref="jsonUtils"/>
+    </bean>
+    
+    <bean id="rememberMeCookieDecoder" 
+          class="org.jtalks.jcommune.web.rememberme.RememberMeCookieDecoderImpl" />
+    
+    <bean id="rememberMeCheckService" 
+          class="org.jtalks.jcommune.web.rememberme.RememberMeCheckService">
+          <constructor-arg ref="tokenRepository"/>
+    </bean>
+    
+    <bean id="tokenRepository"
+          class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl">
+        <property name="dataSource" ref="dataSource"/>     
+    </bean>
+    
+    <bean id="loggingConfigurationFilter"
+   	      class="org.jtalks.jcommune.web.filters.LoggingConfigurationFilter" >
+        <constructor-arg ref="securityService" />
+        <constructor-arg>
+            <bean class="org.jtalks.jcommune.web.logging.LoggerMdc"/>
+        </constructor-arg>
+    </bean>
+    
+</beans>
+

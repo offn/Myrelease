@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011  JTalks.org Team
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.jtalks.jcommune.model.entity" auto-import="false">
+    <class name="org.jtalks.common.model.entity.Branch" table="BRANCHES">
+        <cache usage="nonstrict-read-write" region="org.jtalks.EHCOMMON"/>
+        <id column="BRANCH_ID" name="id" unsaved-value="0">
+            <generator class="native"/>
+        </id>
+
+        <!-- 
+           Used to make dummy hibernate hierarchy used in distributed cache.
+        -->
+        <discriminator>
+            <formula>'BRANCH'</formula>
+        </discriminator>
+
+        <property column="UUID" name="uuid" unique="true" not-null="true"/>
+        <property name="name" column="NAME" not-null="true"/>
+        <property name="description" column="DESCRIPTION"/>
+        <!-- 
+            access="noop" means that we don't have that field in POJO and 
+            nothing will be filled with data from DB, but we still can use 
+            this 'field' in queries. We need this to be able to sort branches 
+            by position, e.g. in Move Topic dialog where we show branches 
+            without encompassing sections. 
+        -->
+        <property name="position" column="POSITION" type="integer" access="noop" insert="false" update="false"/>
+
+        <many-to-one name="moderatorsGroup" column="MODERATORS_GROUP_ID" class="org.jtalks.common.model.entity.Group"
+                     not-null="false"/>
+
+        <many-to-one name="section" column="SECTION_ID" class="org.jtalks.common.model.entity.Section"
+                     not-null="false"/>
+
+        <subclass name="org.jtalks.jcommune.model.entity.Branch"
+                  extends="org.jtalks.common.model.entity.Branch"
+                  discriminator-value="BRANCH">
+            <bag name="topics" cascade="all-delete-orphan"
+                 order-by="sticked DESC, modificationDate DESC">
+                <!--No caching here, see JC-378-->
+                <key column="BRANCH_ID" foreign-key="FK_BRANCH"/>
+                <one-to-many class="Topic"/>
+            </bag>
+
+            <set name="subscribers" table="BRANCH_SUBSCRIPTIONS" cascade="all">
+                <cache usage="nonstrict-read-write"/>
+                <key column="BRANCH_ID"/>
+                <many-to-many column="USER_ID" class="org.jtalks.jcommune.model.entity.JCUser"/>
+            </set>
+            
+            <many-to-one name="lastPost" column="LAST_POST" class="org.jtalks.jcommune.model.entity.Post" />
+        </subclass>
+    </class>
+
+    <query name="getAllowedSubscribersForBranch">
+        <![CDATA[SELECT bs FROM org.jtalks.jcommune.model.entity.Branch branch JOIN branch.subscribers bs JOIN bs.groups bsg WHERE branch = (:branch) AND branch.id
+            not in (select v.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches v where v.granting=0 and v.sid in elements(bsg.id))]]>
+    </query>
+
+    <query name="getCountPostsInBranch">
+        <![CDATA[SELECT COUNT(post) FROM Post post WHERE post.topic.branch = :branch]]>
+    </query>
+
+    <!--Get count of unread posts in branch to user-->
+    <sql-query name="getCountUnreadPostsInBranch">
+        <return-scalar column="cposts" type="integer"/>
+        select COUNT(*) as cposts from COUNT_POSTS_TOPICS_VIEW c left join LAST_READ_POSTS lrp ON
+        c.TOPIC_ID=lrp.TOPIC_ID and lrp.USER_ID=:user
+        where c.BRANCH_ID=:branch and (lrp.ID is NULL or lrp.LAST_READ_POST_INDEX &lt; c.POSTS_COUNT)
+    </sql-query>
+
+    <query name="getAllBranches">
+        <![CDATA[FROM org.jtalks.jcommune.model.entity.Branch b ORDER BY b.section.position ASC, b.position ASC]]>
+    </query>
+
+    <query name="getAllAvailableBranches">
+        <![CDATA[FROM org.jtalks.jcommune.model.entity.Branch branch WHERE branch.id
+            in (select distinct view.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches view where view.sid in (:groupIds)
+            and view.branchId not in (select v.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches v where v.granting=0 and v.sid in (:groupIds)))
+            ORDER BY branch.section.position ASC, branch.position ASC]]>
+    </query>
+
+    <query name="getAllAvailableBranchesInSection">
+        <![CDATA[FROM org.jtalks.jcommune.model.entity.Branch branch WHERE branch.section = (:section) AND branch.id
+            in (select distinct view.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches view where view.sid in (:groupIds)
+            and view.branchId not in (select v.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches v where v.granting=0 and v.sid in (:groupIds)))
+            ORDER BY branch.section.position ASC, branch.position ASC]]>
+    </query>
+</hibernate-mapping>

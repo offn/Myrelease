@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>jcommune-view</artifactId>
+        <groupId>org.jtalks.jcommune</groupId>
+        <version>1.8-SNAPSHOT</version>
+    </parent>
+    <artifactId>jcommune-web-view</artifactId>
+    <packaging>war</packaging>
+    <name>${project.artifactId}</name>
+    <url>www.jtalks.org</url>
+    <description>
+        This module contains web resources (images, js, html, jsp, etc) and other
+        web related resources, like web.xml.
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cj.trim</groupId>
+            <artifactId>trim-filter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jtalks.jcommune</groupId>
+            <artifactId>jcommune-web-controller</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time-jsptags</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.0.2</version>
+                <configuration>
+                    <wait>true</wait>
+                    <container>
+                        <containerId>tomcat6x</containerId>
+                        <type>installed</type>
+                        <home>${env.CATALINA_HOME}</home>
+                    </container>
+                    <configuration>
+                        <type>existing</type>
+                        <home>${env.CATALINA_HOME}</home>
+                    </configuration>
+                    <deployer>
+                        <type>installed</type>
+                        <deployables>
+                            <deployable>
+                                <groupId>org.jtalks.jcommune</groupId>
+                                <artifactId>jcommune-web-view</artifactId>
+                                <type>war</type>
+                            </deployable>
+                        </deployables>
+                    </deployer>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <!--Substitutes version number into a source code to show it on the page-->
+                <configuration>
+                    <!--useCache=true needed for maven replacer plugin to access resources,
+                        as well as prepare-package phase and goal exploded in execution-->
+                    <useCache>true</useCache>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>war-pack</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                        <configuration>
+                            <nonFilteredFileExtensions>
+                                <nonFilteredFileExtension>gif</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>ico</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+                                <nonFilteredFileExtension>png</nonFilteredFileExtension>
+                            </nonFilteredFileExtensions>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!--Replacer plugin allows us to reduce the size of jsp pages by about 30%-->
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <basedir>${project.build.directory}</basedir>
+                    <includes>
+                        <!--Scan all jsp and tag files for get rid of spaces-->
+                        <include>${project.build.finalName}/WEB-INF/**/*.jsp</include>
+                        <include>${project.build.finalName}/WEB-INF/**/*.tag</include>
+                    </includes>
+                    <regexFlags>
+                        <regexFlag>MULTILINE</regexFlag>
+                    </regexFlags>
+                    <unescape>true</unescape>
+                    <replacements>
+                        <replacement>
+                            <!--Replace two or more spaces, tabs and line breaks with one space-->
+                            <token>(.)\s{2,}(.)</token>
+                            <value>$1 $2</value>
+                        </replacement>
+                        <!--Remove all new line characters(Windows and Unix)-->
+                        <replacement>
+                            <token>\r\n|\n</token>
+                            <value></value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <finalName>jcommune</finalName>
+    </build>
+
+    
+
+
+ <profiles>
+               <profile>
+			<!-- 
+			Профиль предназначен для автоматического “передеплоя” сервиса на WebSphere'у, установленную на unix\linux машине. 
+			Для корректной работы автоматического “передеплоя” требуется:
+				1) Сервис должен быть “задеплоен” на WebSphere'у хотя бы один раз вручную. 
+				2) На компьютере, где происходит сборка сервиса, должна быть установлена полная версия ssh клиента PuTTY, содержащая утилиты pscp, plink и 
+					в переменных окружения компьютера должен быть прописан путь до PuTTY директории: set PATH=C:\path\to\putty\directory;%PATH%
+
+			Принцип работы следующий:
+				1)	Перед выполнением в скрипты (лежат в src/main/autodeploy) подставляются необходимые значения, взятые из параметров профиля
+				2)	На удаленный компьютер по ssh копируется сервис и предварительно подготовленные скрипты. 
+				3)	Скрипты через ssh удаленно запускаются.
+			-->
+			<id>autodeploy</id>
+			<activation>
+				<property>
+					<name>autodeploy</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<properties>
+				<!-- удаленный сервер, где установлена WebSphere'а -->
+				<host.name>95.31.43.197</host.name>
+				
+				<!-- логин и пароль для доступа по ssh к удаленному серверу -->
+				<host.user>root</host.user>
+				<host.password>88888888</host.password>
+				
+				<!-- директория, где установлена WebSphere 
+				/websphere/diasoft/profiles/DEPOSIT
+				/websphere/IBM/WebSphere/AppServer -->
+				<host.websphereHome>/opt/IBM/WebSphere/AppServerCommunityEdition</host.websphereHome>
+				
+				<!-- временная директория на удаленном компьютере, куда будут скопированы требуемые для установки файлы. должен быть разрешен доступ на запись -->
+				<host.tmpDirectory>/opt/IBM/WebSphere/Autodeploy</host.tmpDirectory>
+
+				<!-- файл сервиса, не менять -->
+				<fileName>${project.build.finalName}.${packaging}</fileName>
+
+				<!-- параметры WebSphere для передеплоя сервиса -->
+				<!-- все точки заменяем на нижние подчеркивания в applicationName -->
+				<websphere.applicationName>${artifactId}${packaging}</websphere.applicationName>
+				<websphere.contextName>${artifactId}</websphere.contextName>
+				<!--websphere.cellName>souz4newNode02Cell</websphere.cellName>
+				<websphere.nodeName>souz4newNode02</websphere.nodeName-->
+				<websphere.serverName>Default Server</websphere.serverName>
+				
+				<!-- не менять -->
+				<ssh.teg>@</ssh.teg>
+			</properties>
+			<build>
+				<plugins>
+				    <plugin>
+			
+  
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>2.7.1</version>
+        <configuration>
+          <mailSender>
+            <name>Release Notification</name>
+            <email>rsmagin@diasoft.ru</email>
+          </mailSender>
+        </configuration>
+      </plugin>
+
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.5</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/autodeploy</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${basedir}/src/main/autodeploy</directory>
+											<filtering>true</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<executions>
+							
+							<execution>
+								<id>ssh</id>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<workingDirectory>${project.build.directory}/autodeploy</workingDirectory>
+									<executable>ssh.bat</executable>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<ignoreResult>false</ignoreResult>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile> 
+ </profiles>
+
+<properties>
+        <headerBaseDir>${basedir}/../..</headerBaseDir>
+    </properties>
+
+
+
+ </project>

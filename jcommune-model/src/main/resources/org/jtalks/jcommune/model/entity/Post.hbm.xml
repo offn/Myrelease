@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011  JTalks.org Team
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.jtalks.jcommune.model.entity">
+    <class name="Post" table="POST">
+        <cache usage="read-write"/>
+        <id name="id" column="POST_ID" unsaved-value="0">
+            <generator class="native"/>
+        </id>
+        <property name="uuid" column="UUID" unique="true" not-null="true"/>
+        <property name="creationDate" column="POST_DATE"
+                  type="org.joda.time.contrib.hibernate.PersistentDateTime"
+                  not-null="true"/>
+        <property name="modificationDate" type="org.joda.time.contrib.hibernate.PersistentDateTime"
+                  column="MODIFICATION_DATE" not-null="false"/>
+        <property name="postContent" type="text" column="POST_CONTENT" not-null="true"/>
+
+        <many-to-one name="userCreated" column="USER_CREATED" class="org.jtalks.jcommune.model.entity.JCUser"
+                     fetch="join"
+                     foreign-key="FK_USER" lazy="false" not-null="true" cascade="save-update"/>
+        <many-to-one name="topic" column="TOPIC_ID" not-null="false"/>
+    </class>
+    <query name="getAllPostsInTopic">
+        <![CDATA[FROM Post as post
+             WHERE post.topic = :topicId ORDER BY post.creationDate]]>
+    </query>
+
+    <query name="getCountPostsOfUser">
+        <![CDATA[SELECT count(*) FROM Post WHERE userCreated = :userCreated]]>
+    </query>
+    
+    <query name="getPostsOfUser">
+        <![CDATA[FROM Post p WHERE p.userCreated = :userCreated ORDER BY creationDate DESC]]>
+    </query>
+    
+    <query name="getCountPostsInTopic">
+        <![CDATA[SELECT count(*) FROM Post WHERE topic = :topic]]>
+    </query>
+    
+    <query name="getPostsInTopic">
+        <![CDATA[FROM Post WHERE topic = :topic]]>
+    </query>
+    
+    <query name="getLastPostForBranch">
+        <![CDATA[FROM Post p WHERE p.topic.branch = :branch ORDER BY p.creationDate DESC]]>
+    </query>
+
+</hibernate-mapping>

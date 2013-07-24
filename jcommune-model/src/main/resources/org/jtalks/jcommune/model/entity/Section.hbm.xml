@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011  JTalks.org Team
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.jtalks.jcommune.model.entity" auto-import="false">
+    <class name="org.jtalks.common.model.entity.Section" table="SECTIONS">
+        <cache usage="nonstrict-read-write" region="org.jtalks.EHCOMMON"/>
+        <id column="SECTION_ID" name="id" unsaved-value="0">
+            <generator class="native"/>
+        </id>
+
+        <property column="UUID" name="uuid" unique="true" not-null="true"/>
+        <property name="name" column="NAME" not-null="true"/>
+        <property name="description" column="DESCRIPTION"/>
+        <property name="position" column="POSITION"/>
+
+        <list name="branches" cascade="all-delete-orphan">
+            <cache usage="nonstrict-read-write"/>
+            <key column="SECTION_ID" foreign-key="FK_SECTION"/>
+            <index column="POSITION"/>
+            <one-to-many class="Branch"/>
+        </list>
+    </class>
+
+    <!--Returns the count of available display Brunches. Used to define: Available section to view or not.-->
+    <!--For logged users - by groups-->
+    <query name="getCountAvailableBranchesByGroupsIds">
+        <![CDATA[SELECT COUNT(distinct view.branchId) FROM org.jtalks.jcommune.model.entity.ViewTopicsBranches view WHERE view.branchId IN (:branchIds) AND view.sid IN (:groupIds) AND view.branchId not in (select v.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches v where v.granting=0 and v.sid in (:groupIds))]]>
+    </query>
+    <!--For anonymous users-->
+    <query name="getCountAvailableBranchesForAnonymousUser">
+        <![CDATA[SELECT COUNT(distinct view.branchId) FROM org.jtalks.jcommune.model.entity.ViewTopicsBranches view WHERE view.branchId IN (:branchIds) AND view.sid LIKE 'anonymousUser' AND view.granting=1]]>
+    </query>
+
+    <query name="getAllAvailableForMoveTopicSections">
+        <![CDATA[SELECT distinct section FROM org.jtalks.common.model.entity.Section section JOIN section.branches sb LEFT OUTER JOIN sb.topics sbt
+            WHERE (sbt.id <> (:topicId) OR sbt is null) AND sb.id in (select distinct view.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches view
+            where view.sid in (:groupIds) and view.branchId not in (select v.branchId from org.jtalks.jcommune.model.entity.ViewTopicsBranches v
+            where v.granting=0 and v.sid in (:groupIds))) ORDER BY section.position ASC]]>
+    </query>
+
+
+</hibernate-mapping>

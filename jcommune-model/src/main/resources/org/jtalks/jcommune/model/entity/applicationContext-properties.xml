@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2011  JTalks.org Team
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="sendingNotificationsProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="SENDING_NOTIFICATIONS_ENABLED"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="jcommune.sending_notifications_enabled"/>
+        <property name="defaultValue" value="true"/>
+    </bean>
+
+    <bean id="sessionTimeoutProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="SESSION_TIMEOUT"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="jcommune.session_timeout"/>
+        <property name="defaultValue" value="30"/>
+    </bean>
+
+    <bean id="avatarMaxSizeProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="AVATAR_MAX_SIZE"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="jcommune.avatar_max_size"/>
+        <property name="defaultValue" value="4194304"/>
+        <!-- 4096 * 1024 = 4194304 -->
+    </bean>
+
+    <bean id="forumLogoMaxSizeProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="FORUM_LOGO_MAX_SIZE"/>
+        <property name="propertyDao"><null/></property>
+        <property name="name" value="jcommune.forum_logo_max_size"/>
+        <property name="defaultValue" value="10240"/>
+        <!-- 10 * 1024 = 10 240 -->
+    </bean>
+
+    <bean id="componentNameProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_NAME"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.name"/>
+        <property name="defaultValue" value=""/>
+    </bean>
+
+    <bean id="componentDescriptionProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_DESCRIPTION"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.description"/>
+        <property name="defaultValue" value=""/>
+    </bean>
+
+    <bean id="componentSapeAccountProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_SAPE_ACCOUNT_ID"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.sape_account_id"/>
+        <property name="defaultValue" value=""/>
+    </bean>
+
+    <bean id="componentSapeOnMainPageEnableProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_SAPE_ON_MAIN_PAGE_ENABLE"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.sape_on_main_page_enable"/>
+        <property name="defaultValue" value="false"/>
+    </bean>
+
+    <bean id="componentSapeLinksCountProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_SAPE_LINKS_COUNT"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.sape_links_count"/>
+        <property name="defaultValue" value="6"/>
+    </bean>
+
+    <bean id="componentSapeHostProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_HOST_URL"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.sape_host_url"/>
+        <property name="defaultValue" value=""/>
+    </bean>
+
+    <bean id="componentSapeTimeoutProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_SAPE_TIMEOUT"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.sape_timeout"/>
+        <property name="defaultValue" value="1000"/>
+    </bean>
+    
+    <bean id="componentSapeShowDummyLinksProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_SAPE_SHOW_DUMMY_LINKS"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.sape_show_dummy_links"/>
+        <property name="defaultValue" value="false"/>
+    </bean>
+
+    <bean id="componentSapeEnableServiceProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="CMP_SAPE_ENABLED"/>
+        <property name="componentDao" ref="componentDao"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="cmp.sape_enable_service"/>
+        <property name="defaultValue" value="false"/>
+    </bean>
+
+    <bean id="componentLogoTooltipProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="LOGO_TOOLTIP"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="jcommune.logo_tooltip"/>
+        <property name="defaultValue" value=""/>
+    </bean>
+
+    <bean id="componentInfoChangeDateProperty" class="org.jtalks.jcommune.model.entity.JCommuneProperty"
+          factory-method="valueOf">
+        <constructor-arg type="java.lang.String" value="ADMIN_INFO_LAST_UPDATE_TIME"/>
+        <property name="propertyDao" ref="propertyDao"/>
+        <property name="name" value="jcommune.info_change_date"/>
+        <property name="defaultValue" value="0"/>
+    </bean>
+
+</beans>
