@@ -11,6 +11,7 @@
   <url>www.jtalks.org</url>
   <description>
     This module contains domain model of the project, and also - persistence layer.
+    For demonstration.
   </description>
 
   <dependencies>
