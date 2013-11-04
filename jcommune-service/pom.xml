@@ -12,7 +12,7 @@
   <description>
     This is the module that contains all the business logic of the project, also - transactions
     are implemented on this level.
-    Demonstration!
+    Demonstration
   </description>
 
   <dependencies>
